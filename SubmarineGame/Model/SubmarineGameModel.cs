@@ -59,5 +59,54 @@ namespace Model
         }
 
         #endregion
+
+        #region Public methods
+
+        public void NewGame()
+        {
+
+        }
+
+        public void LoadGame(String fileName)
+        {
+
+        }
+
+        public void SaveGame(String fileName)
+        {
+
+        }
+
+        public void PauseGame()
+        {
+
+        }
+
+        public void Submarine_MoveUp()
+        {
+
+        }
+
+        public void Submarine_MoveDown()
+        {
+
+        }
+
+        public void Submarine_MoveLeft()
+        {
+
+        }
+
+        public void Submarine_MoveRight()
+        {
+
+        }
+
+        public void MoveMines()
+        {
+
+        }
+
+        #endregion
     }
 }
