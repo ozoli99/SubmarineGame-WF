@@ -33,6 +33,8 @@ namespace Model
 
         #region Events
 
+        public event EventHandler<SubmarineEventArgs> TimePaused;
+
         #endregion
 
         #region Properties
@@ -86,7 +88,7 @@ namespace Model
 
         public void PauseGame()
         {
-
+            TimePaused?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, false, false, false));
         }
 
         public void Submarine_MoveUp()
