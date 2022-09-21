@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System;
 using Model;
+using Persistence;
 
 namespace View
 {
@@ -58,6 +59,83 @@ namespace View
             KeyDown += new KeyEventHandler(GameForm_KeyDown);
 
             NewGame();
+        }
+
+        #endregion
+
+        #region Menu event handlers
+
+        private void MenuFile_NewGame(object sender, EventArgs e)
+        {
+            StopTimers();
+
+            toolStripDestroyedMineCount.Text = "0";
+
+            NewGame();
+        }
+
+        private void MenuFile_LoadGame(object sender, EventArgs e)
+        {
+            StopTimers();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _model.LoadGame(openFileDialog.FileName);
+
+                    submarine.Top = _model.Submarine.Y;
+                    submarine.Left = _model.Submarine.X;
+
+                    RemoveMines();
+
+                    for (Int32 i = 0; i < _model.Mines.Count; ++i)
+                    {
+                        CreateMine(_model.Mines[i].X, _model.Mines[i].Y);
+                    }
+
+                    StartTimers();
+                }
+                catch (DataException)
+                {
+                    MessageBox.Show("Error occurred during load.", "Submarine Game", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void MenuFile_SaveGame(object sender, EventArgs e)
+        {
+            StopTimers();
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    _model.SaveGame(saveFileDialog.FileName);
+                }
+                catch (DataException)
+                {
+                    MessageBox.Show("Error occurred during save.", "Submarine Game", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            StartTimers();
+        }
+
+        private void MenuFile_Exit(object sender, EventArgs e)
+        {
+            Boolean restartTimer = _gameTimer.Enabled;
+            StopTimers();
+
+            if (MessageBox.Show("Are you sure you want to quit?", "Submarine Game", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Close();
+            }
+            else
+            {
+                if (restartTimer)
+                {
+                    StartTimers();
+                }
+            }
         }
 
         #endregion
