@@ -64,7 +64,14 @@ namespace Model
 
         public void NewGame()
         {
+            _destroyedMineCount = 0;
+            gameTime = 0;
 
+            _submarine.X = (GameAreaWidth - SubmarineSize) / 2;
+            _submarine.Y = (GameAreaHeight - SubmarineSize);
+
+            _mines.Clear();
+            GenerateStartingMines();
         }
 
         public void LoadGame(String fileName)
@@ -105,6 +112,38 @@ namespace Model
         public void MoveMines()
         {
 
+        }
+
+        public Shape AddMine()
+        {
+            Int32 mineX = _random.Next(1, GameAreaWidth - MineSize);
+            Int32 mineWeight = _random.Next(1, 4);
+
+            Shape newMine = new Shape(ShapeType.Mine, mineX, 0, MineSize, MineSize, mineWeight);
+
+            while (_mines.Contains(newMine))
+            {
+                mineX = _random.Next(1, GameAreaWidth - MineSize);
+                mineWeight = _random.Next(1, 4);
+
+                newMine = new Shape(ShapeType.Mine, mineX, 0, MineSize, MineSize, mineWeight);
+            }
+
+            _mines.Add(newMine);
+
+            return newMine;
+        }
+
+        #endregion
+
+        #region Private methods
+
+        private void GenerateStartingMines()
+        {
+            for (Int32 i = 0; i < 6; ++i)
+            {
+                AddMine();
+            }
         }
 
         #endregion
