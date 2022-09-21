@@ -33,6 +33,8 @@ namespace Model
 
         #region Events
 
+        public event EventHandler<SubmarineEventArgs> GameOver;
+        public event EventHandler<SubmarineEventArgs> SubmarineMoved;
         public event EventHandler<SubmarineEventArgs> TimePaused;
 
         #endregion
@@ -93,22 +95,43 @@ namespace Model
 
         public void Submarine_MoveUp()
         {
+            if (_submarine.Y > SubmarineStep + 24)
+            {
+                _submarine.Y = _submarine.Y - SubmarineStep;
 
+                SubmarineMoved?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, true, false, false, false));
+                CheckGame();
+            }
         }
 
         public void Submarine_MoveDown()
         {
-
+            if (_submarine.Y < (GameAreaHeight - _submarine.Height) - SubmarineStep)
+            {
+                _submarine.Y = _submarine.Y + SubmarineStep;
+                SubmarineMoved?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, true, false, false));
+                CheckGame();
+            }
         }
 
         public void Submarine_MoveLeft()
         {
-
+            if (_submarine.X > SubmarineStep)
+            {
+                _submarine.X = _submarine.X - SubmarineStep;
+                SubmarineMoved?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, false, true, false));
+                CheckGame();
+            }
         }
 
         public void Submarine_MoveRight()
         {
-
+            if (_submarine.X < (GameAreaWidth - _submarine.Width) - SubmarineStep)
+            {
+                _submarine.X = _submarine.X + SubmarineStep;
+                SubmarineMoved?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, false, false, true));
+                CheckGame();
+            }
         }
 
         public void MoveMines()
@@ -118,8 +141,8 @@ namespace Model
 
         public Shape AddMine()
         {
-            Int32 mineX = _random.Next(1, GameAreaWidth - MineSize);
-            Int32 mineWeight = _random.Next(1, 4);
+            int mineX = _random.Next(1, GameAreaWidth - MineSize);
+            int mineWeight = _random.Next(1, 4);
 
             Shape newMine = new Shape(ShapeType.Mine, mineX, 0, MineSize, MineSize, mineWeight);
 
@@ -142,9 +165,27 @@ namespace Model
 
         private void GenerateStartingMines()
         {
-            for (Int32 i = 0; i < 6; ++i)
+            for (int i = 0; i < 6; ++i)
             {
                 AddMine();
+            }
+        }
+
+        private void CheckGame()
+        {
+            for (int i = 0; i < _mines.Count; ++i)
+            {
+                bool collisionLeftAndBottom = (_mines[i].X <= _submarine.X && (_mines[i].X + _mines[i].Width) >= _submarine.X) && (_mines[i].Y <= _submarine.Y && (_mines[i].Y + _mines[i].Height) >= _submarine.Y);
+                bool collisionRightAndBottom = (_mines[i].X <= (_submarine.X + _submarine.Width) && (_mines[i].X + _mines[i].Width) >= (_submarine.X + _submarine.Width)) && (_mines[i].Y <= _submarine.Y && (_mines[i].Y + _mines[i].Height) >= _submarine.Y);
+                bool collisionLeftAndTop = (_mines[i].X <= _submarine.X && (_mines[i].X + _mines[i].Width) >= _submarine.X) && (_mines[i].Y <= (_submarine.Y + _submarine.Height) && (_mines[i].Y + _mines[i].Height) >= (_submarine.Y + _submarine.Height));
+                bool collisionRightAndTop = (_mines[i].X <= (_submarine.X + _submarine.Width) && (_mines[i].X + _mines[i].Width) >= (_submarine.X + _submarine.Width) && (_mines[i].Y <= (_submarine.Y + _submarine.Height)) && (_mines[i].Y + _mines[i].Height) >= (_submarine.Y + _submarine.Height));
+
+                if (collisionLeftAndBottom || collisionRightAndBottom || collisionLeftAndTop || collisionRightAndTop)
+                {
+                    gameTime = 0;
+                    _destroyedMineCount = 0;
+                    GameOver?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, false, false, false));
+                }
             }
         }
 
