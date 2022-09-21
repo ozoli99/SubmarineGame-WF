@@ -35,6 +35,7 @@ namespace Model
 
         public event EventHandler<SubmarineEventArgs> GameOver;
         public event EventHandler<SubmarineEventArgs> SubmarineMoved;
+        public event EventHandler<SubmarineEventArgs> MineDestroyed;
         public event EventHandler<SubmarineEventArgs> TimePaused;
 
         #endregion
@@ -136,7 +137,19 @@ namespace Model
 
         public void MoveMines()
         {
+            for (int i = 0; i < _mines.Count; ++i)
+            {
+                _mines[i].Y = _mines[i].Y + (_mines[i].Weight * MineStep);
+                if (_mines[i].Y > GameAreaHeight)
+                {
+                    _mines.RemoveAt(i);
+                    _destroyedMineCount++;
+                    MineDestroyed?.Invoke(this, new SubmarineEventArgs(gameTime, _destroyedMineCount, false, false, false, false));
+                    i--;
+                }
+            }
 
+            CheckGame();
         }
 
         public Shape AddMine()
