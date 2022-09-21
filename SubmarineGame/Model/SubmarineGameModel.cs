@@ -81,12 +81,35 @@ namespace Model
 
         public void LoadGame(String fileName)
         {
+            if (_persistence == null)
+                return;
 
+            List<Shape> submarineAndMines = _persistence.Load(fileName, ref gameTime, ref _destroyedMineCount);
+
+            _submarine = submarineAndMines[0];
+            submarineAndMines.RemoveAt(0);
+
+            _mines.Clear();
+            _mines = submarineAndMines;
+
+            CheckGame();
         }
 
         public void SaveGame(String fileName)
         {
+            if (_persistence == null)
+                return;
 
+            List<Shape> mines = new List<Shape>();
+            for (int i = 0; i < _mines.Count; ++i)
+            {
+                mines.Add(_mines[i]);
+            }
+            Shape submarine = _submarine;
+            Int32 gameTime = this.gameTime;
+            Int32 destroyedMineCount = _destroyedMineCount;
+
+            _persistence.Save(fileName, mines, submarine, gameTime, destroyedMineCount);
         }
 
         public void PauseGame()
