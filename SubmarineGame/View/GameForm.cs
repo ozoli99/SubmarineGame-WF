@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Diagnostics;
-using System;
 using Model;
 using Persistence;
 
@@ -14,9 +11,9 @@ namespace View
         private SubmarineGameModel _model;
         private List<PictureBox> _mines;
         private Stopwatch _stopWatch;
-        private Timer _timer;
-        private Timer _gameTimer;
-        private Timer _minesTimer;
+        private System.Windows.Forms.Timer _timer;
+        private System.Windows.Forms.Timer _gameTimer;
+        private System.Windows.Forms.Timer _minesTimer;
 
         #endregion
 
@@ -38,17 +35,17 @@ namespace View
             _mines = new List<PictureBox>();
 
             // This'll move the mines
-            _timer = new Timer();
+            _timer = new System.Windows.Forms.Timer();
             _timer.Interval = 50;
             _timer.Tick += new EventHandler(Timer_Tick);
 
             // This'll be responsible for the elapsed game time
-            _gameTimer = new Timer();
+            _gameTimer = new System.Windows.Forms.Timer();
             _gameTimer.Interval = 1000;
             _gameTimer.Tick += new EventHandler(GameTimer_Tick);
 
             // This'll be responsible for the mine generation
-            _minesTimer = new Timer();
+            _minesTimer = new System.Windows.Forms.Timer();
             _minesTimer.Interval = 3000;
             _minesTimer.Tick += new EventHandler(MinesTimer_Tick);
 
@@ -88,7 +85,7 @@ namespace View
 
                     RemoveMines();
 
-                    for (Int32 i = 0; i < _model.Mines.Count; ++i)
+                    for (int i = 0; i < _model.Mines.Count; ++i)
                     {
                         CreateMine(_model.Mines[i].X, _model.Mines[i].Y);
                     }
@@ -122,7 +119,7 @@ namespace View
 
         private void MenuFile_Exit(object sender, EventArgs e)
         {
-            Boolean restartTimer = _gameTimer.Enabled;
+            bool restartTimer = _gameTimer.Enabled;
             StopTimers();
 
             if (MessageBox.Show("Are you sure you want to quit?", "Submarine Game", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -226,6 +223,38 @@ namespace View
 
         #endregion
 
+        #region Time event handlers
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            MoveMines();
+        }
+
+        private void GameTimer_Tick(object sender, EventArgs e)
+        {
+            _model.gameTime++;
+            toolStripTime.Text = TimeSpan.FromSeconds(_model.gameTime).ToString();
+        }
+
+        private void MinesTimer_Tick(object sender, EventArgs e)
+        {
+            GenerateMine();
+            if (_minesTimer.Interval <= 3000 && _minesTimer.Interval > 2000)
+            {
+                _minesTimer.Interval -= 300;
+            }
+            else if (_minesTimer.Interval > 1000 && _minesTimer.Interval <= 2000)
+            {
+                _minesTimer.Interval -= 200;
+            }
+            else if (_minesTimer.Interval <= 1000 && _minesTimer.Interval > 500)
+            {
+                _minesTimer.Interval -= 100;
+            }
+        }
+
+        #endregion
+
         #region Private methods
 
         private void NewGame()
@@ -256,6 +285,21 @@ namespace View
             _mines.Clear();
         }
 
+        private void GenerateMine()
+        {
+            Shape newMine = _model.AddMine();
+
+            PictureBox mine = new PictureBox();
+            mine.Tag = "mine";
+            mine.Image = Properties.Resources.nuclear_bomb;
+            mine.SizeMode = PictureBoxSizeMode.AutoSize;
+            mine.Top = newMine.Y;
+            mine.Left = newMine.X;
+
+            _mines.Add(mine);
+            this.Controls.Add(mine);
+        }
+
         private void CreateMine(int mineX, int mineY = 0)
         {
             PictureBox mine = new PictureBox();
@@ -267,6 +311,26 @@ namespace View
 
             _mines.Add(mine);
             this.Controls.Add(mine);
+        }
+
+        private void MoveMines()
+        {
+            _model.MoveMines();
+
+            // If there was a deletion
+            if (_model.Mines.Count != _mines.Count)
+            {
+                RemoveMines();
+                for (int i = 0; i < _model.Mines.Count; ++i)
+                {
+                    CreateMine(_model.Mines[i].X, _model.Mines[i].Y);
+                }
+            }
+
+            for (int i = 0; i < _mines.Count; ++i)
+            {
+                _mines[i].Top += SubmarineGameModel.MineStep * _model.Mines[i].Weight;
+            }
         }
 
         private void StartTimers()

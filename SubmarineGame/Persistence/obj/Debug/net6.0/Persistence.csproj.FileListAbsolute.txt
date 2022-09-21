@@ -1,0 +1,12 @@
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\bin\Debug\net6.0\Persistence.deps.json
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\bin\Debug\net6.0\Persistence.dll
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\bin\Debug\net6.0\Persistence.pdb
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.csproj.AssemblyReference.cache
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.GeneratedMSBuildEditorConfig.editorconfig
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfoInputs.cache
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.AssemblyInfo.cs
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.csproj.CoreCompileInputs.cache
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.dll
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\refint\Persistence.dll
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\Persistence.pdb
+F:\Projects\Demos\DotNET\SubmarineGame-WF\SubmarineGame\Persistence\obj\Debug\net6.0\ref\Persistence.dll

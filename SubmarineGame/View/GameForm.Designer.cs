@@ -139,7 +139,7 @@
             // 
             // submarine
             // 
-            this.submarine.Image = global::View.Properties.Resources.submarine;
+            this.submarine.Image = Properties.Resources.submarine;
             this.submarine.Location = new System.Drawing.Point(402, 572);
             this.submarine.Name = "submarine";
             this.submarine.Size = new System.Drawing.Size(64, 64);
