@@ -172,6 +172,60 @@ namespace View
 
         #endregion
 
+        #region Game event handlers
+
+        private void Game_SubmarineMoved(object sender, SubmarineEventArgs e)
+        {
+            if (e.MoveUp)
+            {
+                submarine.Top -= SubmarineGameModel.SubmarineStep;
+            }
+            else if (e.MoveDown)
+            {
+                submarine.Top += SubmarineGameModel.SubmarineStep;
+            }
+            else if (e.MoveLeft)
+            {
+                submarine.Left -= SubmarineGameModel.SubmarineStep;
+            }
+            else
+            {
+                submarine.Left += SubmarineGameModel.SubmarineStep;
+            }
+        }
+
+        private void Game_GameOver(object sender, SubmarineEventArgs e)
+        {
+            StopTimers();
+
+            _stopWatch.Stop();
+            long elapsedTime = _stopWatch.ElapsedMilliseconds / 1000;
+
+            saveGameToolStripMenuItem.Enabled = false;
+
+            if (MessageBox.Show("Game Over" + Environment.NewLine + "Time: " + TimeSpan.FromSeconds(elapsedTime).ToString("g") + Environment.NewLine + "Destroyed mines: " + e.DestroyedMineCount.ToString("g"), "Submarine Game", MessageBoxButtons.OK, MessageBoxIcon.Asterisk) == DialogResult.OK)
+            {
+                NewGame();
+            }
+        }
+
+        private void Game_MineDestroyed(object sender, SubmarineEventArgs e)
+        {
+            toolStripDestroyedMineCount.Text = e.DestroyedMineCount.ToString("g");
+        }
+
+        private void Game_TimePaused(object sender, SubmarineEventArgs e)
+        {
+            StopTimers();
+
+            if (MessageBox.Show("Game Paused" + Environment.NewLine + "Do you want to continue the game?", "Submarine Game", MessageBoxButtons.OK, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                StartTimers();
+            }
+        }
+
+        #endregion
+
         #region Private methods
 
         private void NewGame()
