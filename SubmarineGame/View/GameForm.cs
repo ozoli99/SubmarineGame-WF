@@ -140,6 +140,38 @@ namespace View
 
         #endregion
 
+        #region GameForm event handlers
+
+        private void GameForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Up:
+                case Keys.W:
+                    _model.Submarine_MoveUp();
+                    break;
+                case Keys.Down:
+                case Keys.S:
+                    _model.Submarine_MoveDown();
+                    break;
+                case Keys.Left:
+                case Keys.A:
+                    _model.Submarine_MoveLeft();
+                    submarine.Image = Properties.Resources.submarineLeft;
+                    break;
+                case Keys.Right:
+                case Keys.D:
+                    _model.Submarine_MoveRight();
+                    submarine.Image = Properties.Resources.submarine;
+                    break;
+                case Keys.Space:
+                    _model.PauseGame();
+                    break;
+            }
+        }
+
+        #endregion
+
         #region Private methods
 
         private void NewGame()
