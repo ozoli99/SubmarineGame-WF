@@ -32,12 +32,14 @@ az eltelt idő, valamint a felrobbant aknák száma. Elfogadása után új ját�
 - Szintén dialógusablakkal végezzük el a mentést, illetve a betöltést, a fájlneveket a
 felhasználó adja meg. Valamint a játék menüsorból való bezárása esetén is egy dialógusablak
 bizonyosodik meg a szándékunkról.
+![Use case diagram](https://github.com/ozoli99/SubmarineGame-WF/blob/main/Submarine%20Game%20Use%20Case%20Diagram.jpeg)
 ## Tervezés
 ### Programszerkezet:
 - A programot háromrétegű architektúrában valósítjuk meg. A megjelenítés a **View**,
 a modell a **Model**, míg a perzisztencia a **Persistence** névtérben helyezkedik el.
 Továbbá a rétegeket külön projektként adjuk hozzá az újrafelhasználhatóság
 érdekében.
+![Package diagram](https://github.com/ozoli99/SubmarineGame-WF/blob/main/Package%20diagram.jpeg)
 ### Perzisztencia:
 - Az adatkezelés feladata a tengeralattjáró, valamint az aknák helyzetével,
 tulajdonságaival kapcsolatos információk tárolása, valamint a betöltés/mentés
@@ -89,3 +91,4 @@ mozgatásáért, a **_gameTimer** felel a játék közben eltelt idő mutatásá
 **_minesTimer** felelős az aknák generálásáért. Ezek indításáért a **StartTimers**,
 leállításáért a **StopTimers** metódusok felelnek.
 ### A program teljes statikus szerkezete:
+![Class diagram](https://github.com/ozoli99/SubmarineGame-WF/blob/main/Class%20diagram.jpeg)
